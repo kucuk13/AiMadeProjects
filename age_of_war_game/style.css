@@ -1,0 +1,93 @@
+/*
+ * Basic styling for the Age of Wars game.  The layout is kept simple:
+ * a canvas occupies most of the screen with a HUD bar at the top for
+ * resource display and spawn buttons.  Colours evoke a classic retro
+ * look.  Feel free to tweak sizes and colours to taste.
+ */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #111;
+    color: #eee;
+    font-family: sans-serif;
+    height: 100%;
+}
+
+#game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+#gameCanvas {
+    background: linear-gradient(#445, #222);
+    border: 2px solid #888;
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+#hud {
+    width: 100%;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.hud-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 4px 0;
+    flex-wrap: wrap;
+}
+
+.unit-button {
+    background: #337ab7;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 2px;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.unit-button:hover {
+    background: #285e8e;
+}
+
+.unit-button:disabled {
+    background: #555;
+    cursor: not-allowed;
+}
+
+#end-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 30px;
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    font-size: 32px;
+    border: 2px solid #999;
+    border-radius: 8px;
+    display: none;
+    z-index: 10;
+}
+
+.hidden {
+    display: none;
+}

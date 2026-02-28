@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age of Wars – HTML&nbsp;Game</title>
+    <!--
+      A simple homage to the classic Age of War game.  The objective is
+      to destroy the enemy base by spawning units that march across the
+      battlefield.  See script.js for the game logic.  CSS styling lives
+      in style.css.  Audio for background music and attack sound effects
+      are loaded from local files generated specifically for this project.
+    -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- The canvas displays the battlefield and all sprites -->
+        <canvas id="gameCanvas" width="960" height="450"></canvas>
+        <!-- Heads‑up display with resources and spawn controls -->
+        <div id="hud">
+            <div class="hud-row">
+                <span id="money-display">Money: 0</span>
+                <span id="player-health">Your Base: 1000 HP</span>
+                <span id="enemy-health">Enemy Base: 1000 HP</span>
+            </div>
+            <div class="hud-row">
+                <!-- Buttons to spawn different unit types.  Each has a
+                     data-type attribute used by script.js to look up
+                     statistics and costs.  Adjust the text and cost in
+                     the accompanying unitTypes object in script.js. -->
+                <button class="unit-button" data-type="infantry">Infantry (50)</button>
+                <button class="unit-button" data-type="archer">Archer (75)</button>
+                <button class="unit-button" data-type="knight">Knight (150)</button>
+            </div>
+        </div>
+        <!-- End message appears when the player wins or loses -->
+        <div id="end-message" class="hidden"></div>
+    </div>
+    <!-- Audio elements: sources are set in script.js to local .wav files
+         generated for this game.  The background music loops by default. -->
+    <audio id="background-music" loop></audio>
+    <audio id="attack-sound"></audio>
+    <script src="script.js"></script>
+</body>
+</html>
