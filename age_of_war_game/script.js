@@ -106,8 +106,12 @@
     let enemySpawnInterval = 5.0; // initial seconds between spawns
     let enemySpawnDecrease = 0.05; // spawn interval decrease after each spawn (increasing difficulty)
     let lastMoneyAccrual = 0;
-    const moneyPerSecond = 10; // passive income
+    let moneyPerSecond = 10; // passive income; overridden by difficulty
     let gameOver = false;
+    // Whether a difficulty level has been chosen.  Until this is
+    // true the game will not progress and the player must select
+    // a difficulty from the overlay.
+    let difficultyChosen = false;
 
     // Base positions: drawn at the left and right edges
     function getPlayerBaseX() {
@@ -184,6 +188,61 @@
         });
     });
 
+    // Difficulty overlay elements.  When the page loads, the overlay
+    // remains visible until the player selects one of the difficulty
+    // buttons.  Selecting a difficulty configures spawn rates and
+    // income, hides the overlay and allows the game to begin.
+    const difficultyOverlay = document.getElementById('difficulty-overlay');
+    const difficultyButtons = document.querySelectorAll('.difficulty-button');
+
+    // Configuration for each difficulty level
+    const difficultySettings = {
+        easy: {
+            spawnInterval: 6.0,
+            spawnDecrease: 0.02,
+            money: 250,
+            moneyRate: 12
+        },
+        medium: {
+            spawnInterval: 5.0,
+            spawnDecrease: 0.05,
+            money: 200,
+            moneyRate: 10
+        },
+        hard: {
+            spawnInterval: 4.0,
+            spawnDecrease: 0.07,
+            money: 200,
+            moneyRate: 8
+        },
+        veryhard: {
+            spawnInterval: 3.0,
+            spawnDecrease: 0.1,
+            money: 200,
+            moneyRate: 6
+        }
+    };
+
+    difficultyButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const level = btn.getAttribute('data-level');
+            chooseDifficulty(level);
+        });
+    });
+
+    function chooseDifficulty(level) {
+        const settings = difficultySettings[level] || difficultySettings.medium;
+        enemySpawnInterval = settings.spawnInterval;
+        enemySpawnDecrease = settings.spawnDecrease;
+        playerMoney = settings.money;
+        moneyPerSecond = settings.moneyRate;
+        difficultyChosen = true;
+        // Hide overlay
+        difficultyOverlay.style.display = 'none';
+        // Start music when difficulty is selected so it begins once
+        maybeStartMusic();
+    }
+
     // Update HUD each frame
     function updateHUD() {
         moneyDisplay.textContent = `Money: ${Math.floor(playerMoney)}`;
@@ -200,7 +259,8 @@
 
     // Core update logic called each frame
     function update(dt) {
-        if (gameOver) return;
+        // If no difficulty has been selected, pause the game logic
+        if (!difficultyChosen || gameOver) return;
 
         // Passive income accrual
         lastMoneyAccrual += dt;
@@ -238,8 +298,13 @@
     function updateUnits(units, opposingUnits, dt, direction) {
         for (let i = units.length - 1; i >= 0; i--) {
             const unit = units[i];
-            // Skip if dead (will remove later)
-            if (unit.health <= 0) continue;
+            // Immediately remove units whose health is zero or below.  Without
+            // this check dead units would continue to be drawn because
+            // they remain in the array.
+            if (unit.health <= 0) {
+                units.splice(i, 1);
+                continue;
+            }
 
             // Reduce cooldown timer
             if (unit.cooldown > 0) {
@@ -291,11 +356,7 @@
                 unit.x += unit.speed * dt * direction;
             }
 
-            // Remove dead units (health <= 0)
-            if (unit.health <= 0) {
-                // Remove this unit from array
-                units.splice(i, 1);
-            }
+            // Removal of dead units is handled at the top of the loop
         }
     }
 

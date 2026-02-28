@@ -36,6 +36,23 @@
         </div>
         <!-- End message appears when the player wins or loses -->
         <div id="end-message" class="hidden"></div>
+
+        <!-- Difficulty selection overlay.  When the page loads the game will
+             display this overlay asking the player to choose between
+             four difficulty levels.  Once a choice is made the game starts.
+             The overlay is hidden via script once a selection is clicked. -->
+        <div id="difficulty-overlay" class="overlay">
+            <div class="overlay-content">
+                <h2>Seviye Seçimi</h2>
+                <p>Bir zorluk seviyesi seçin:</p>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-button" data-level="easy">Kolay</button>
+                    <button class="difficulty-button" data-level="medium">Orta</button>
+                    <button class="difficulty-button" data-level="hard">Zor</button>
+                    <button class="difficulty-button" data-level="veryhard">Çok Zor</button>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- Audio elements: sources are set in script.js to local .wav files
          generated for this game.  The background music loops by default. -->

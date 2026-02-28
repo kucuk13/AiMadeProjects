@@ -1,0 +1,11 @@
+bana age of wars oyunu yap
+-sadece javascript, css ve html olacak
+-ses ve müzik olacak
+
+
+4 seviye ekle, kolay, orta, zor ve çok zor, oyunun başında sor
+
+
+bugfix
+
+
