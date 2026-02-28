@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monopoly Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <h1>Monopoly Game</h1>
+    <div id="setup" class="panel">
+      <h2>Oyuncu Sayısını Seçin</h2>
+      <label for="player-count">Oyuncular (2‑6):</label>
+      <select id="player-count">
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
+      <button id="start-button">Oyunu Başlat</button>
+    </div>
+
+    <!-- Game container -->
+    <div id="game" class="hidden">
+      <div id="board-container">
+        <div id="board"></div>
+        <div id="center-area">
+          <div id="dice-display">
+            <div class="dice" id="die1">-</div>
+            <div class="dice" id="die2">-</div>
+          </div>
+          <button id="roll-button">Zar At</button>
+          <button id="end-turn-button" class="hidden">Sıra Bitir</button>
+          <div id="action-panel" class="hidden">
+            <div id="action-text"></div>
+            <div id="action-buttons"></div>
+          </div>
+        </div>
+      </div>
+      <div id="info-container">
+        <h2>Oyuncular</h2>
+        <div id="players-info"></div>
+        <div id="message"></div>
+      </div>
+    </div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>

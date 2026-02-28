@@ -1,0 +1,206 @@
+/* Monopoly Game styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f2f2f2;
+  color: #333;
+}
+
+#app {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.panel {
+  padding: 15px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#board-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+#board {
+  width: 660px;
+  height: 660px;
+  display: grid;
+  grid-template-rows: repeat(11, 1fr);
+  grid-template-columns: repeat(11, 1fr);
+  border: 2px solid #333;
+  margin-right: 20px;
+  background: #ffffff;
+}
+
+#center-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#dice-display {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.dice {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  border: 2px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  font-size: 24px;
+  border-radius: 4px;
+}
+
+#roll-button,
+#end-turn-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+#end-turn-button {
+  background-color: #ccc;
+}
+
+#action-panel {
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  background: #fff;
+  padding: 10px;
+  width: 100%;
+}
+
+#action-buttons button {
+  margin: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+#info-container {
+  flex: 1;
+}
+
+#players-info {
+  margin-top: 10px;
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.player-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-right: 5px;
+  border: 1px solid #333;
+}
+
+.current-player {
+  font-weight: bold;
+}
+
+#message {
+  margin-top: 15px;
+  min-height: 40px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Board squares */
+.square {
+  border: 1px solid #ccc;
+  position: relative;
+  background-color: #fafafa;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.square .property-color {
+  height: 8px;
+  width: 100%;
+}
+
+.square .name {
+  flex-grow: 1;
+  padding: 2px;
+  font-size: 9px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.square .price {
+  padding: 2px;
+  font-size: 8px;
+  text-align: center;
+  font-weight: bold;
+  color: #333;
+}
+
+.square .tokens {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: calc(100% - 4px);
+}
+
+.token {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 1px;
+  border: 1px solid #333;
+}
+
+/* Property colors */
+.brown { background-color: #8B4513; }
+.lightblue { background-color: #ADD8E6; }
+.pink { background-color: #FFC0CB; }
+.orange { background-color: #FFA500; }
+.red { background-color: #FF4C4C; }
+.yellow { background-color: #FFFF99; }
+.green { background-color: #32CD32; }
+.darkblue { background-color: #00008B; }
+
+/* Types of squares styling */
+.go { background-color: #CDE7D8; }
+.jail { background-color: #EADCA5; }
+.free-parking { background-color: #F5EBE0; }
+.go-to-jail { background-color: #E5B7B7; }
+.chance { background-color: #F0E68C; }
+.community { background-color: #F5DEB3; }
+.tax { background-color: #F7C8C8; }
+.utility { background-color: #D0E8F2; }
+.railroad { background-color: #E8E8E8; }

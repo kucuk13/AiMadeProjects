@@ -1,0 +1,3 @@
+bana monopoly oyunu yap
+-sadece javascript, css ve html olacak
+-en az 2'den en fazla 6 oyuncuyla oynanabilir olacak, aynı cihazdan olacak, farklı cihazlar olmayacak
