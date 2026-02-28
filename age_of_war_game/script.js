@@ -56,6 +56,27 @@
     const enemyHealthDisplay = document.getElementById('enemy-health');
     const endMessage = document.getElementById('end-message');
 
+    // === Asset loading ===
+    // We use small 64x64 pixel sprites to represent units instead of simple
+    // circles.  Each image is loaded once at startup and cached in the
+    // `images` object for quick access during rendering.  The castle image
+    // represents both the player's base and the enemy base.  All art assets
+    // come from open‑source CC0 licensed artwork on OpenGameArt and
+    // IconsDB【630383032861464†L81-L83】【555996140505837†L84-L87】.
+    const images = {
+        infantry: new Image(),
+        archer: new Image(),
+        knight: new Image(),
+        castle: new Image()
+    };
+    // Relative paths correspond to files placed in the `assets` folder.  These
+    // are downloaded at build time from their respective sources.  See the
+    // repository README for attribution details.
+    images.infantry.src = 'assets/infantry.png';
+    images.archer.src = 'assets/archer.png';
+    images.knight.src = 'assets/knight.png';
+    images.castle.src = 'assets/castle.png';
+
     // Unit definitions.  Each object defines cost, base health,
     // damage per hit, movement speed (pixels per second) and attack
     // range (pixels).  The size property controls the drawn radius on
@@ -137,8 +158,13 @@
     function Unit(x, typeKey, side) {
         const type = unitTypes[typeKey];
         this.x = x;
-        this.y = canvas.height - 60; // vertical position near the bottom
+        // vertical position is used only to compute the baseline for
+        // health bars; actual sprite drawing uses the ground level.
+        this.y = canvas.height - 60;
         this.type = type;
+        this.typeKey = typeKey;
+        // Assign the preloaded sprite to this unit for quick access
+        this.image = images[typeKey];
         this.health = type.health;
         this.damage = type.damage;
         this.speed = type.speed;
@@ -146,8 +172,7 @@
         this.attackRate = type.attackRate;
         this.size = type.size;
         // Colour depends on side: enemy units use a lighter shade of
-        // the type's base colour to aid visual distinction.  Player
-        // units retain the original colour.
+        // the type's base colour to aid visual distinction on health bars.
         this.color = side === 'enemy' ? lighten(type.color, 1.6) : type.color;
         this.side = side; // 'player' or 'enemy'
         this.cooldown = 0; // time until next attack
@@ -368,28 +393,49 @@
         ctx.fillStyle = '#333';
         ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
 
-        // Draw bases
-        // Player base (left)
-        ctx.fillStyle = '#2979ff';
-        ctx.fillRect(getPlayerBaseX() - 10, canvas.height - 120, 40, 120);
-        // Enemy base (right)
-        ctx.fillStyle = '#e53935';
-        ctx.fillRect(getEnemyBaseX() - 30, canvas.height - 120, 40, 120);
 
-        // Draw units
+        // Draw bases using castle sprite.  The same icon is used for both
+        // sides; orientation does not matter for a static structure.  The
+        // bases sit on the ground just like units.  Size is scaled from
+        // the original 64×64 asset to occupy a more substantial area.
+        const castleW = 80;
+        const castleH = 80;
+        const groundY = canvas.height - 50;
+        const baseY = groundY - castleH;
+        // Player base on the left
+        ctx.drawImage(images.castle, getPlayerBaseX() - 20, baseY, castleW, castleH);
+        // Enemy base on the right
+        ctx.drawImage(images.castle, getEnemyBaseX() - castleW + 20, baseY, castleW, castleH);
+
+        // Draw units as sprites.  Each sprite faces towards the enemy.  For
+        // enemy units we flip the image horizontally so they march from
+        // right to left.  A small health bar appears above each sprite.
+        const UNIT_W = 40;
+        const UNIT_H = 40;
         function drawUnits(units) {
             for (const unit of units) {
-                ctx.beginPath();
-                ctx.fillStyle = unit.color;
-                ctx.arc(unit.x, unit.y - 20, unit.size, 0, Math.PI * 2);
-                ctx.fill();
-                // Health bar
-                const barWidth = unit.size * 2;
+                const img = unit.image;
+                // vertical position so that the sprite stands on the ground
+                const yPos = groundY - UNIT_H;
+                ctx.save();
+                if (unit.side === 'enemy') {
+                    // Flip horizontally around the unit's x coordinate
+                    ctx.translate(unit.x, yPos + UNIT_H / 2);
+                    ctx.scale(-1, 1);
+                    ctx.drawImage(img, -UNIT_W / 2, -UNIT_H / 2, UNIT_W, UNIT_H);
+                } else {
+                    ctx.drawImage(img, unit.x - UNIT_W / 2, yPos, UNIT_W, UNIT_H);
+                }
+                ctx.restore();
+                // Health bar above sprite
+                const barWidth = UNIT_W;
                 const healthRatio = Math.max(0, unit.health / unit.type.health);
+                const barX = unit.x - barWidth / 2;
+                const barY = yPos - 8;
                 ctx.fillStyle = '#444';
-                ctx.fillRect(unit.x - barWidth / 2, unit.y - 40, barWidth, 4);
-                ctx.fillStyle = '#76ff03';
-                ctx.fillRect(unit.x - barWidth / 2, unit.y - 40, barWidth * healthRatio, 4);
+                ctx.fillRect(barX, barY, barWidth, 4);
+                ctx.fillStyle = unit.side === 'enemy' ? '#ef5350' : '#76ff03';
+                ctx.fillRect(barX, barY, barWidth * healthRatio, 4);
             }
         }
         drawUnits(playerUnits);
