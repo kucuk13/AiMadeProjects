@@ -1,0 +1,38 @@
+name: Build APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Kodu çek
+        uses: actions/checkout@v4
+
+      - name: Java 17 kur
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Gradle kur
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Wrapper üret
+        run: gradle wrapper
+
+      - name: Wrapper çalıştırma izni ver
+        run: chmod +x ./gradlew
+
+      - name: Debug APK derle
+        run: ./gradlew assembleDebug
+
+      - name: APK artifact yükle
+        uses: actions/upload-artifact@v4
+        with:
+          name: countdown-app-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
